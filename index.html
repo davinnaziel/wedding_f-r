@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wedding of Fadhlan & Rachma</title>
+    <link rel="icon" type="image/png" href="assets/image/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'signature': ['Great Vibes', 'cursive'],
+                        'title': ['Playfair Display', 'serif'],
+                        'body': ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#1A3C34',
+                        'secondary': '#C4A484',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        [x-cloak] { display: none !important; }
+        html, body { overflow-x: hidden; } /* Penting agar AOS tidak error di mobile */
+        .bg-cover-img {
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('assets/image/IMG_0067.JPG');
+            background-size: cover;
+            background-position: center;
+        }
+        .no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; }
+        
+        /* Fix AOS agar terlihat saat render */
+        [data-aos] { pointer-events: none; }
+        .aos-animate { pointer-events: auto; }
+    </style>
+</head>
+<body class="font-body text-stone-800 no-scroll" x-data="weddingApp()" x-init="init()">
+
+    <audio id="weddingMusic" loop>
+        <source src="assets/audio/musik.mp3" type="audio/mpeg">
+    </audio>
+
+    <div x-show="loading" class="fixed inset-0 z-[100] bg-primary flex flex-col items-center justify-center text-white" >
+        <img src="assets/image/logo.png" class="w-32 h-32  animate-pulse">
+        <p class="tracking-[0.3em] text-sm animate-pulse font-bold">Loading...</p>
+    </div>
+
+    <section x-show="showCover" x-transition:leave="transition ease-in duration-1000 transform scale-110 opacity-0" 
+        class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-cover-img text-white text-center px-6">
+        <div class="animate-fadeIn" data-aos="zoom-in" data-aos-duration="2000" >
+            <p class="uppercase tracking-[0.5em] text-sm mb-4" >The Wedding of</p>
+            <h1 class="font-signature text-7xl md:text-9xl text-secondary mb-8" >Fadhlan & Rachma</h1>
+            <div class="bg-white/20 backdrop-blur-md p-8 rounded-2xl text-white max-w-sm mx-auto shadow-2xl border border-white/30" data-aos="flip-right" data-aos-duration="2000" data-aos-delay="200" >
+                <p class="mb-2 italic">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+                <h2 class="text-xl font-bold mb-6">Tamu Undangan</h2>
+                <button @click="openInvitation" class="bg-secondary text-white px-10 py-4 rounded-full hover:bg-white hover:text-primary transition-all duration-300 font-bold shadow-lg">
+                    <i class="fa-solid fa-envelope-open-text mr-2"></i> BUKA UNDANGAN
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <main x-show="!showCover" x-cloak class="bg-stone-50 overflow-hidden">
+        
+        <section class="relative h-screen flex items-center justify-center">
+            <template x-for="(img, index) in slides" :key="index">
+                <div x-show="activeSlide === index" 
+                     x-transition:enter="transition ease-out duration-1000"
+                     x-transition:enter-start="opacity-0 scale-105"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     class="absolute inset-0">
+                    <img :src="img" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40"></div>
+                </div>
+            </template>
+            <div class="relative z-10 text-center text-white" data-aos="zoom-in" data-aos-duration="2000">
+                <p class="uppercase tracking-[0.4em] mb-4">Undangan Pernikahan</p>
+                <h2 class="font-signature text-6xl md:text-8xl text-secondary">Fadhlan & Rachma</h2>
+                <p class="mt-6 font-title text-2xl tracking-widest border-t border-b border-white/30 inline-block px-8 py-2">24 . 05 . 2026</p>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 max-w-6xl mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="font-signature text-6xl text-primary">Mempelai</h2>
+                <div class="h-1 w-24 bg-secondary mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="text-center" data-aos="fade-right" data-aos-delay="200">
+                    <div class="relative w-72 h-96 mx-auto mb-8">
+                        <img src="assets/image/IMG_0004.JPG" class="w-full h-full object-cover rounded-t-full border-4 border-secondary p-2 shadow-2xl">
+                    </div>
+                    <h3 class="font-title text-4xl text-primary font-bold">Fadhlan Azka Fauzan</h3>
+                    <p class="text-secondary font-semibold uppercase tracking-widest text-sm mt-2">Putra Pertama dari Bapak Wawan Gunawan & Ibu Yulianti</p>
+                    <a href="https://www.instagram.com/fdhlanaf_?igsh=bmdyNnY5aTZoYXRt" class="text-2xl hover:text-secondary transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+                <div class="text-center" data-aos="fade-left" data-aos-delay="400">
+                    <div class="relative w-72 h-96 mx-auto mb-8">
+                        <img src="assets/image/IMG_0090.JPG" class="w-full h-full object-cover rounded-t-full border-4 border-secondary p-2 shadow-2xl">
+                    </div>
+                    <h3 class="font-title text-4xl text-primary font-bold">Rachma Putri Nabila</h3>
+                    <p class="text-secondary font-semibold uppercase tracking-widest text-sm mt-2">Putri terakhir dari Bapak H Dedi Arifiansyah (ALM) & Ibu Hj Lilis Komariah</p>
+                     <a href="https://www.instagram.com/rhmapn__" class="text-2xl hover:text-secondary transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 px-6 bg-primary text-white overflow-hidden">
+            <div class="max-w-4xl mx-auto text-center" data-aos="fade-up">
+                <h2 class="font-signature text-5xl text-secondary mb-10">Tentang Kita</h2>
+                <div class="relative">
+                    <div class="absolute left-1/2 -translate-x-1/2 h-full w-1 bg-secondary/30 hidden md:block"></div>
+                    
+                    <div class="space-y-12 relative">
+                        <div class="md:flex md:justify-between items-center" data-aos="fade-right">
+                            <div class="md:w-5/12 text-right hidden md:block">
+                                <span class="bg-secondary px-4 py-1 rounded-full text-sm font-bold">2024</span>
+                            </div>
+                            <div class="md:w-5/12 text-left bg-white/10 p-6 rounded-2xl backdrop-blur-sm border border-white/10">
+                                <h4 class="font-bold text-secondary text-xl mb-2">Pertama Bertemu</h4>
+                                <p class="text-sm text-stone-300">Berawal dari pertemuan singkat di sebuah acara sosial, kami mulai menyadari kecocokan satu sama lain.</p>
+                            </div>
+                        </div>
+
+                        <div class="md:flex md:justify-between items-center" data-aos="fade-left">
+                            <div class="md:w-5/12 text-right bg-white/10 p-6 rounded-2xl backdrop-blur-sm border border-white/10">
+                                <h4 class="font-bold text-secondary text-xl mb-2">Memulai Komitmen</h4>
+                                <p class="text-sm text-stone-300">Setelah bertahun-tahun berbagi tawa dan duka, kami memutuskan untuk melangkah ke jenjang yang lebih serius.</p>
+                            </div>
+                            <div class="md:w-5/12 text-left hidden md:block">
+                                <span class="bg-secondary px-4 py-1 rounded-full text-sm font-bold">2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 bg-stone-100 text-center">
+            <div data-aos="zoom-in">
+                <h2 class="mb-10 tracking-widest uppercase text-xs font-bold text-primary">Menghitung Hari Bahagia</h2>
+                <div class="flex justify-center gap-4 md:gap-8">
+                    <template x-for="(val, label) in countdown" :key="label">
+                        <div class="bg-white p-4 rounded-xl min-w-[75px] md:min-w-[100px] shadow-lg border-b-4 border-secondary">
+                            <span class="text-3xl md:text-5xl font-bold block text-primary" x-text="val"></span>
+                            <span class="text-xs uppercase tracking-widest text-stone-400" x-text="label"></span>
+                        </div>
+                    </template>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 bg-white">
+            <div class="max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8 mb-16">
+                    <div class="bg-stone-50 p-10 rounded-3xl text-center shadow-xl border border-stone-100" data-aos="fade-right">
+                        <i class="fa-solid fa-ring text-5xl text-secondary mb-6"></i>
+                        <h3 class="font-title text-3xl font-bold mb-4 text-primary">Akad Nikah</h3>
+                        <p class="font-bold text-lg">Minggu, 24 mei 2026</p>
+                        <p class="text-secondary font-bold">08:00 - 10:00 WIB</p>
+                        <p class="text-sm mt-4 text-stone-500">Heboh Guest House Syariah, Kabupaten Bandung</p>
+                    </div>
+                    <div class="bg-stone-50 p-10 rounded-3xl text-center shadow-xl border border-stone-100" data-aos="fade-left">
+                        <i class="fa-solid fa-champagne-glasses text-5xl text-secondary mb-6"></i>
+                        <h3 class="font-title text-3xl font-bold mb-4 text-primary">Resepsi</h3>
+                        <p class="font-bold text-lg">Minggu, 24 mei 2026</p>
+                        <p class="text-secondary font-bold">11:00 - 16:00 WIB</p>
+                        <p class="text-sm mt-4 text-stone-500">Heboh Guest House Syariah, Kabupaten Bandung</p>
+                    </div>
+                </div>
+
+                <div class="text-center" data-aos="zoom-in">
+                    <h3 class="font-title text-2xl font-bold mb-6">Lokasi Acara</h3>
+                      <h2 class="font-title text-2xl font-bold mb-4 text-primary">Heboh Guest House Syariah</h2>
+                    <div class="rounded-3xl overflow-hidden shadow-2xl h-96 border-4 border-white mb-8">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15839.277873216518!2d107.67664425!3d-7.03043865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68ea3f3f3f3f3f%3A0x3f3f3f3f3f3f3f3f!2sHeboh%20Guest%20House!5e0!3m2!1sid!2sid!4v1700000000000" 
+                            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                    <a href="https://maps.app.goo.gl/Fm6J6Vc1P4mcDMAw8" target="_blank" 
+                       class="inline-block bg-primary text-white px-12 py-4 rounded-full font-bold shadow-xl hover:bg-secondary transition-colors duration-300">
+                        <i class="fa-solid fa-location-dot mr-2"></i> LIHAT DI GOOGLE MAPS
+                    </a>
+                </div>
+            </div>
+        </section>
+
+     <section class="py-24 px-6 bg-stone-50 overflow-hidden" 
+         x-data="{ gallery: weddingApp().gallery }"
+         x-init="$nextTick(() => { 
+             // Menunggu Alpine selesai merender DOM, lalu refresh AOS
+             setTimeout(() => { AOS.refreshHard(); }, 500); 
+         })">
+    
+    <h2 class="font-signature text-6xl text-center text-primary mb-16" 
+        data-aos="fade-up" 
+        data-aos-duration="1500">
+        Galeri Foto
+    </h2>
+    
+    <div class="columns-2 md:columns-4 gap-4 space-y-4 max-w-6xl mx-auto">
+        
+        <template x-for="(foto, index) in gallery" :key="index">
+            <div class="overflow-hidden rounded-2xl shadow-lg group bg-stone-200"
+                 data-aos="fade-up" 
+                 :data-aos-delay="index * 150" 
+                 data-aos-duration="1000"
+                 data-aos-anchor-placement="top-bottom">
+                
+                <img :src="foto" 
+                     alt="Foto Galeri"
+                     class="w-full h-auto object-cover transform transition duration-700 group-hover:scale-110 group-hover:brightness-90 cursor-pointer">
+            </div>
+        </template>
+
+    </div>
+</section>
+
+              <section class="py-24 px-6 md:px-12 bg-gradient-to-t from-stone-100 to-stone-50">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="font-signature text-6xl text-center text-primary mb-16" data-aos="fade-up" data-aos-duration="2000">Wedding Gift</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white/90 backdrop-blur-md p-10 rounded-3xl shadow-2xl border-t-8 border-blue-500 hover:shadow-3xl transition-all duration-500" data-aos="flip-left" data-aos-duration="1000">
+                        <p class="text-xs text-stone-500 uppercase tracking-widest mb-6 font-medium">Bank BCA</p>
+                        <p class="text-2xl md:text-3xl font-bold text-stone-800 mb-2 tracking-tight">3460893509</p>
+                        <p class="text-stone-600 text-lg font-medium">a/n Fadhlan azka fauzan</p>
+                    </div>
+                    <div class="bg-white/90 backdrop-blur-md p-10 rounded-3xl shadow-2xl border-t-8 border-yellow-300 hover:shadow-3xl transition-all duration-500" data-aos="flip-right" data-aos-duration="1000" data-aos-delay="200">
+                        <p class="text-xs text-stone-500 uppercase tracking-widest mb-6 font-medium">Bank BRI</p>
+                        <p class="text-2xl md:text-3xl font-bold text-stone-800 mb-2 tracking-tight">429101035436502</p>
+                        <p class="text-stone-600 text-lg font-medium">a/n Rachma Putri nabila</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+      <section class="py-24 px-6 bg-white" x-init="fetchComments()">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-stone-50 p-10 rounded-3xl shadow-2xl border border-stone-100" data-aos="fade-up">
+            <h2 class="font-title text-3xl font-bold mb-8 text-center text-primary underline decoration-secondary">Doa & Harapan</h2>
+            
+            <div class="space-y-6">
+                <input type="text" x-model="newComment.nama" placeholder="Nama Anda" 
+                    class="w-full p-4 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-secondary outline-none transition-all">
+                <textarea x-model="newComment.ucapan" placeholder="Tuliskan ucapan untuk mempelai..." rows="4" 
+                    class="w-full p-4 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-secondary outline-none transition-all"></textarea>
+                
+              <button @click="sendComment" :disabled="isSending" class="bg-primary text-white py-4 rounded-xl font-bold px-2 hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+    <span x-show="!isSending">Kirim Pesan</span>
+    <span x-show="isSending">MENGIRIM...</span>
+</button>
+            </div>
+        </div>
+
+        <div class="mt-12 space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+            <template x-for="(item, index) in comments" :key="index">
+                <div class="bg-stone-50 p-6 rounded-2xl border-l-4 border-secondary shadow-sm" data-aos="fade-up">
+                    <h4 class="font-bold text-primary" x-text="item.nama"></h4>
+                    <p class="text-stone-600 text-sm italic mt-1 leading-relaxed" x-text="item.ucapan"></p>
+                    <p class="text-[10px] text-stone-400 mt-3 font-semibold uppercase tracking-tighter" x-text="item.tanggal"></p>
+                </div>
+            </template>
+        </div>
+    </div>
+</section>
+
+        <section class="py-24 px-8 text-center bg-stone-50">
+            <div class="max-w-3xl mx-auto" data-aos="zoom-in">
+                <i class="fa-solid fa-heart text-4xl text-secondary/30 mb-8 block"></i>
+                <p class="text-xl md:text-2xl font-title italic leading-relaxed text-stone-700">
+                    "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang."
+                </p>
+                <p class="mt-8 font-bold text-primary tracking-widest text-sm">— QS. Ar-Rum: 21 —</p>
+            </div>
+        </section>
+
+        <footer class="py-16 bg-primary text-white text-center">
+            <h2 class="font-signature text-5xl text-secondary mb-6">Fadhlan & Rachma</h2>
+            <p class="text-xs uppercase tracking-[0.5em] text-stone-400">Copyright By DVN</p>
+            <div class="mt-10 flex justify-center gap-8">
+                <a href="https://www.instagram.com/dvinnzl_?igsh=MXZ1c2lsb3A5Z2E5dQ==" class="text-2xl hover:text-secondary transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://wa.me/+62895413568090" class="text-2xl hover:text-secondary transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </footer>
+
+    </main>
+
+    <button @click="toggleMusic" x-show="!showCover" 
+        class="fixed bottom-8 right-8 z-[90] bg-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-primary border-2 border-secondary animate-bounce">
+        <i class="fa-solid" :class="isPlaying ? 'fa-music' : 'fa-volume-mute'"></i>
+    </button>
+
+    <script>
+        function weddingApp() {
+            return {
+                // Masukkan di dalam return weddingApp()
+comments: [],
+isSending: false,
+newComment: { nama: '', ucapan: '' },
+scriptURL: 'https://script.google.com/macros/s/AKfycbyQV4JnEJxTO5bIFFOq296HeSVys0ZeCAHdnIJ8MP35Oswf4L1_Y94EE_2dK_ZDt0Zz/exec', // Ganti dengan URL dari Langkah 1
+
+async fetchComments() {
+    try {
+        const response = await fetch(this.scriptURL);
+        this.comments = await response.json();
+    } catch (e) { console.error("Gagal mengambil data", e); }
+},
+
+async sendComment() {
+    if (!this.newComment.nama || !this.newComment.ucapan) {
+        alert("Silakan isi nama dan ucapan terlebih dahulu");
+        return;
+    }
+
+    this.isSending = true;
+    try {
+        await fetch(this.scriptURL, {
+            method: 'POST',
+            mode: 'no-cors', // Penting agar tidak kena CORS error
+            body: JSON.stringify(this.newComment)
+        });
+
+        // Karena no-cors, kita tidak bisa baca respon 'success', 
+        // jadi kita reset manual & ambil ulang data setelah sedikit delay
+        this.newComment = { nama: '', ucapan: '' };
+        setTimeout(() => {
+            this.fetchComments();
+            this.isSending = false;
+        }, 1000);
+
+    } catch (e) {
+        console.error("Gagal mengirim", e);
+        this.isSending = false;
+    }
+},
+
+                loading: true,
+                showCover: true,
+                activeSlide: 0,
+                isPlaying: false,
+                slides: [
+                    'assets/image/IMG_0018.JPG',
+                    'assets/image/IMG_0024.JPG',
+                    'assets/image/IMG_0064.JPG'
+                ],
+
+                    // FOTO UNTUK GALERI (Bisa sebanyak yang Anda mau)
+            // Masukkan path/lokasi foto Anda di sini
+            gallery: [
+                'assets/image/galery/IMG_0007.JPG',
+                'assets/image/galery/IMG_0025.JPG',
+                'assets/image/galery/IMG_0034.JPG',
+                'assets/image/galery/IMG_0056.JPG',
+                'assets/image/galery/IMG_0067.JPG',
+                'assets/image/galery/IMG_0070.JPG',
+                'assets/image/galery/IMG_0095.JPG',
+                'assets/image/galery/IMG_0111.JPG'
+            ],
+                countdown: { HARI: 0, JAM: 0, MENIT: 0, DETIK: 0 },
+
+                
+                
+                init() {
+                    // Delay AOS agar elemen sudah di-render Alpine sebelum animasi di-init
+                    setTimeout(() => {
+                        this.loading = false;
+                        AOS.init({
+                            duration: 1000,
+                            once: false, // Diganti false agar animasi berulang saat scroll balik
+                            mirror: true,
+                            offset: 100,
+                            easing: 'ease-in-out-sine'
+                        });
+                    }, 3500);
+                    this.startCountdown();
+                },
+                
+                openInvitation() {
+                    this.showCover = false;
+                    document.body.classList.remove('no-scroll');
+                    this.startSlideshow();
+                    
+                    // AUTO PLAY MUSIC
+                    const audio = document.getElementById('weddingMusic');
+                    audio.play().then(() => {
+                        this.isPlaying = true;
+                    }).catch(error => {
+                        console.log("Autoplay dicegah browser, harus ada interaksi user");
+                    });
+
+                    // Refresh AOS setelah content muncul
+                    setTimeout(() => {
+                        AOS.refresh();
+                    }, 500);
+                },
+
+                toggleMusic() {
+                    const audio = document.getElementById('weddingMusic');
+                    if (this.isPlaying) {
+                        audio.pause();
+                    } else {
+                        audio.play();
+                    }
+                    this.isPlaying = !this.isPlaying;
+                },
+                
+                startSlideshow() {
+                    setInterval(() => {
+                        this.activeSlide = (this.activeSlide + 1) % this.slides.length;
+                    }, 5000);
+                },
+
+                startCountdown() {
+                    const target = new Date('2026-05-24T08:00:00').getTime();
+                    setInterval(() => {
+                        const now = new Date().getTime();
+                        const diff = target - now;
+                        this.countdown.HARI = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        this.countdown.JAM = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        this.countdown.MENIT = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        this.countdown.DETIK = Math.floor((diff % (1000 * 60)) / 1000);
+                    }, 1000);
+                }
+                
+            }
+        }
+
+        // Script tambahan untuk memastikan AOS merespon scroll
+        window.addEventListener('scroll', function() {
+            AOS.refresh();
+        });
+        // Tambahan untuk memastikan AOS merespon render dinamis Alpine
+document.addEventListener('alpine:initialized', () => {
+    setTimeout(() => {
+        AOS.refreshHard();
+    }, 1000);
+});
+
+window.addEventListener('load', AOS.refresh);
+    </script>
+    
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</body>
+</html>
