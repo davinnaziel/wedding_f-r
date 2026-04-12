@@ -372,19 +372,30 @@ async sendComment() {
                 
                 
                 init() {
-                    // Delay AOS agar elemen sudah di-render Alpine sebelum animasi di-init
+                    
+                            // Jalankan countdown
+                this.startCountdown();
+
+                // Tunggu sampai seluruh halaman (termasuk semua gambar) selesai dimuat
+                window.onload = () => {
+                    // Beri sedikit jeda halus (misal 500ms) setelah gambar siap
                     setTimeout(() => {
                         this.loading = false;
-                        AOS.init({
-                            duration: 1000,
-                            once: false, // Diganti false agar animasi berulang saat scroll balik
-                            mirror: true,
-                            offset: 100,
-                            easing: 'ease-in-out-sine'
-                        });
-                    }, 3500);
-                    this.startCountdown();
-                },
+                        if (typeof AOS !== 'undefined') {
+                            AOS.init({ duration: 1000, once: false });
+                        }
+                    }, 500);
+                };
+
+                // Failsafe: Jika gambar terlalu lama dimuat (misal 10 detik), paksa hilangkan loading
+                setTimeout(() => {
+                    if (this.loading) {
+                        this.loading = false;
+                        AOS.init({ duration: 1000, once: false });
+                    }
+                }, 10000);
+            },
+                
                 
                 openInvitation() {
                     this.showCover = false;
