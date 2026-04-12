@@ -64,7 +64,7 @@
             <h1 class="font-signature text-7xl md:text-9xl text-secondary mb-8" >Fadhlan & Rachma</h1>
             <div class="bg-white/20 backdrop-blur-md p-8 rounded-2xl text-white max-w-sm mx-auto shadow-2xl border border-white/30" data-aos="flip-right" data-aos-duration="2000" data-aos-delay="200" >
                 <p class="mb-2 italic">Kepada Yth. Bapak/Ibu/Saudara/i</p>
-                <h2 class="text-xl font-bold mb-6">Tamu Undangan</h2>
+                <h2 class="text-xl font-bold mb-6" x-text="guestName"></h2>
                 <button @click="openInvitation" class="bg-secondary text-white px-10 py-4 rounded-full hover:bg-white hover:text-primary transition-all duration-300 font-bold shadow-lg">
                     <i class="fa-solid fa-envelope-open-text mr-2"></i> BUKA UNDANGAN
                 </button>
@@ -304,6 +304,8 @@
     <script>
         function weddingApp() {
             return {
+            // ... (properti lain tetap ada)
+        guestName: 'Tamu Undangan', // Default jika tidak ada nama di link
                 // Masukkan di dalam return weddingApp()
 comments: [],
 isSending: false,
@@ -372,7 +374,14 @@ async sendComment() {
                 
                 
                 init() {
-                    
+                    // Ambil nama dari parameter URL 'to'
+            const urlParams = new URLSearchParams(window.location.search);
+            const nameParam = urlParams.get('to');
+            if (nameParam) {
+                // Mengubah format dari 'budi_setiawan' atau 'Budi Setiawan' 
+                // menjadi tampilan yang rapi
+                this.guestName = decodeURIComponent(nameParam.replace(/_/g, ' '));
+            }
                             // Jalankan countdown
                 this.startCountdown();
 
