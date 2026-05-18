@@ -269,8 +269,9 @@ Dengan penuh rasa syukur kepada Allah SWT, kami memutuskan untuk melangkah ke je
             </div>
         </section>
 
-      <section class="py-24 px-6 bg-white" x-init="fetchComments()">
+    <section class="py-24 px-6 bg-white" x-init="fetchComments()">
     <div class="max-w-2xl mx-auto">
+        <!-- Form Input (AOS di sini aman tetap dipertahankan) -->
         <div class="bg-stone-50 p-10 rounded-3xl shadow-2xl border border-stone-100" data-aos="fade-up">
             <h2 class="font-title text-3xl font-bold mb-8 text-center text-primary underline decoration-secondary">Doa & Harapan</h2>
             
@@ -280,16 +281,18 @@ Dengan penuh rasa syukur kepada Allah SWT, kami memutuskan untuk melangkah ke je
                 <textarea x-model="newComment.ucapan" placeholder="Tuliskan ucapan untuk mempelai..." rows="4" 
                     class="w-full p-4 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-secondary outline-none transition-all"></textarea>
                 
-              <button @click="sendComment" :disabled="isSending" class="bg-primary text-white py-4 rounded-xl font-bold px-2 hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed transition-all">
-    <span x-show="!isSending">Kirim Pesan</span>
-    <span x-show="isSending">MENGIRIM...</span>
-</button>
+                <button @click="sendComment" :disabled="isSending" class="w-full bg-primary text-white py-4 rounded-xl font-bold px-2 hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+                    <span x-show="!isSending">Kirim Pesan</span>
+                    <span x-show="isSending">MENGIRIM...</span>
+                </button>
             </div>
         </div>
 
-        <div class="mt-12 space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+        <!-- Container Daftar Komentar (AOS dipasang di container utama ini, bukan di dalam itemnya) -->
+        <div class="mt-12 space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar" data-aos="fade-up" data-aos-delay="200">
             <template x-for="(item, index) in comments" :key="index">
-                <div class="bg-stone-50 p-6 rounded-2xl border-l-4 border-secondary shadow-sm" data-aos="fade-up">
+                <!-- data-aos="fade-up" DI SINI DIHAPUS agar scroll lancar dan tidak mentok -->
+                <div class="bg-stone-50 p-6 rounded-2xl border-l-4 border-secondary shadow-sm transition-all duration-300 hover:translate-x-1">
                     <h4 class="font-bold text-primary" x-text="item.nama"></h4>
                     <p class="text-stone-600 text-sm italic mt-1 leading-relaxed" x-text="item.ucapan"></p>
                     <p class="text-[10px] text-stone-400 mt-3 font-semibold uppercase tracking-tighter" x-text="item.tanggal"></p>
